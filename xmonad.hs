@@ -107,20 +107,21 @@ myStartupHook = do
     -- spawnOnce "volumeicon &"
     -- spawnOnce "conky -c $HOME/.config/conky/doomone-xmonad.conkyrc"
     spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand false --monitor 1 --transparent true --alpha 180 --tint 0x282c34  --height 22 &"
+    -- spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut false --expand true --monitor 1 --transparent true --alpha 180 --tint 0x282c34  --height 22 &"
     spawnOnce "flameshot &"
     spawnOnce "emacs --daemon &" -- emacs daemon for the emacsclient
     -- uncomment to restore last saved wallpaper
     -- spawnOnce "feh --randomize --bg-fill /home/rohit/Pictures/wallpapers/0051.jpg"
     -- spawnOnce "feh --randomize --bg-fill /home/rohit/Pictures/wallpapers/0108.jpg"
     -- spawnOnce "feh --randomize --bg-fill /home/rohit/Pictures/wallpapers/0253.jpg"
-    spawnOnce "feh --randomize --bg-fill /home/rohits/Pictures/wallpapers/0258.jpg"
+    -- spawnOnce "feh --randomize --bg-fill /home/rohits/Pictures/wallpapers/0258.jpg"
     -- spawnOnce "feh --randomize --bg-fill /home/rohit/Pictures/wallpapers/0294.jpg"
     -- spawnOnce "feh --randomize --bg-fill /home/rohit/Pictures/wall.jpg"
     --uncomment to set a random wallpaper on login
     -- spawnOnce "find /usr/share/backgrounds/dtos-backgrounds/ -type f | shuf -n 1 | xargs xwallpaper --stretch"
 
     -- spawnOnce "~/.fehbg &"  -- set last saved feh wallpaper
-    -- spawnOnce "feh --randomize --bg-fill ~/wallpapers/*"  -- feh set random wallpaper
+    spawnOnce "feh --randomize --bg-fill ~/Pictures/wallpapers/"  -- feh set random wallpaper
     -- spawnOnce "nitrogen --restore &"   -- if you prefer nitrogen to feh
     setWMName "LG3D"
 
@@ -197,6 +198,7 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                 ]
   where
     spawnTerm  = myTerminal ++ " -t scratchpad"
+    -- spawnTerm  = myTerminal ++ " -e bash"
     findTerm   = title =? "scratchpad"
     manageTerm = customFloating $ W.RationalRect l t w h
                where
@@ -359,8 +361,8 @@ myManageHook = composeAll
      , className =? "pinentry-gtk-2"  --> doFloat
      , className =? "splash"          --> doFloat
      , className =? "toolbar"         --> doFloat
-     , className =? "Nwggrid-server"  --> doFloat
-     , className =? "nwggrid"         --> doFloat
+     -- , className =? "Nwggrid-server"  --> doFloat
+     -- , className =? "nwggrid"         --> doFloat
      , className =? "Yad"             --> doCenterFloat
      , title =? "Oracle VM VirtualBox Manager"  --> doFloat
      , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 3 )
@@ -384,7 +386,7 @@ myKeys =
 
         , ("M-S-<Return>", spawn "pcmanfm") -- PCManFM
         -- , ("M-S-<Return>", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
-        , ("M-S-d", spawn "dmenu_run -i -p \"Run: \"") -- Dmenu
+        , ("M-S-d", spawn "dmenu_run -i -nb '#191919' -nf '#ff1493' -sb '#ff1493' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=15' -p \"Run: \"") -- Dmenu
 
         , ("M-S-q", kill1)     -- Kill the currently focused client
         , ("M-S-a", killAll)   -- Kill all windows on current workspace
@@ -395,7 +397,7 @@ myKeys =
         , ("M-d", spawn ("nwggrid -p -o 0.4"))
 
     -- SUPER + s KEYSTROKES
-        , ("M-s t", namedScratchpadAction myScratchPads "terminal")
+        , ("C-<Return>", namedScratchpadAction myScratchPads "terminal")
         , ("M-s m", namedScratchpadAction myScratchPads "mocp")
         , ("M-s c", namedScratchpadAction myScratchPads "calculator")
 
@@ -412,7 +414,7 @@ myKeys =
 
     -- CONTROL + ALT KEYS
         , ("C-M1-p", spawn ("$HOME/.config/xmonad/picom-toggle.sh"))
-        , ("C-M1-w", spawn ("feh --randomize --bg-fill /home/rohit/Pictures/wallpapers/*.jpg"))
+        , ("C-M1-w", spawn ("feh --randomize --bg-fill /home/rohits/Pictures/wallpapers/*.jpg"))
 
     -- CONTROL + e KEYSTROKES
         -- , ("C-e e", spawn myEmacs)                 -- start emacs
