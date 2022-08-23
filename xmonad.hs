@@ -3,64 +3,79 @@
 -- Actions
 
 -- Data
-import Data.Char (isSpace, toUpper)
-import qualified Data.Map as M
-import Data.Maybe (fromJust, isJust)
-import Data.Monoid
-import Data.Tree
-import System.Directory
-import System.Exit (exitSuccess)
-import System.IO (hPutStrLn)
-import XMonad
-import XMonad.Actions.CopyWindow (kill1)
-import XMonad.Actions.CycleWS (Direction1D (..), WSType (..), moveTo, nextScreen, prevScreen, shiftTo)
-import XMonad.Actions.GridSelect
-import XMonad.Actions.MouseResize
-import XMonad.Actions.Promote
-import XMonad.Actions.RotSlaves (rotAllDown, rotSlavesDown)
-import qualified XMonad.Actions.Search as S
-import XMonad.Actions.WindowGo (runOrRaise)
-import XMonad.Actions.WithAll (killAll, sinkAll)
+import           Data.Char                           (isSpace, toUpper)
+import qualified Data.Map                            as M
+import           Data.Maybe                          (fromJust, isJust)
+import           Data.Monoid
+import           Data.Tree
+import           System.Directory
+import           System.Exit                         (exitSuccess)
+import           System.IO                           (hPutStrLn)
+import           XMonad
+import           XMonad.Actions.CopyWindow           (kill1)
+import           XMonad.Actions.CycleWS              (Direction1D (..),
+                                                      WSType (..), moveTo,
+                                                      nextScreen, prevScreen,
+                                                      shiftTo)
+import           XMonad.Actions.GridSelect
+import           XMonad.Actions.MouseResize
+import           XMonad.Actions.Promote
+import           XMonad.Actions.RotSlaves            (rotAllDown, rotSlavesDown)
+import qualified XMonad.Actions.Search               as S
+import           XMonad.Actions.WindowGo             (runOrRaise)
+import           XMonad.Actions.WithAll              (killAll, sinkAll)
 -- Hooks
-import XMonad.Hooks.DynamicLog (PP (..), dynamicLogWithPP, shorten, wrap, xmobarColor, xmobarPP)
-import XMonad.Hooks.EwmhDesktops -- for some fullscreen events, also for xcomposite in obs.
-import XMonad.Hooks.ManageDocks (ToggleStruts (..), avoidStruts, docks, docksEventHook, manageDocks)
-import XMonad.Hooks.ManageHelpers (doCenterFloat, doFullFloat, isFullscreen)
-import XMonad.Hooks.ServerMode
-import XMonad.Hooks.SetWMName
-import XMonad.Hooks.StatusBar.PP
-import XMonad.Hooks.WorkspaceHistory
+import           XMonad.Hooks.DynamicLog             (PP (..), dynamicLogWithPP,
+                                                      shorten, wrap,
+                                                      xmobarColor, xmobarPP)
+import           XMonad.Hooks.EwmhDesktops
+import           XMonad.Hooks.ManageDocks            (ToggleStruts (..),
+                                                      avoidStruts, docks,
+                                                      docksEventHook,
+                                                      manageDocks)
+import           XMonad.Hooks.ManageHelpers          (doCenterFloat,
+                                                      doFullFloat, isFullscreen)
+import           XMonad.Hooks.ServerMode
+import           XMonad.Hooks.SetWMName
+import           XMonad.Hooks.StatusBar.PP
+import           XMonad.Hooks.WorkspaceHistory
 -- Layouts
-import XMonad.Layout.Accordion
-import XMonad.Layout.GridVariants (Grid (Grid))
+import           XMonad.Layout.Accordion
+import           XMonad.Layout.GridVariants          (Grid (Grid))
 -- Layouts modifiers
-import XMonad.Layout.LayoutModifier
-import XMonad.Layout.LimitWindows (decreaseLimit, increaseLimit, limitWindows)
-import XMonad.Layout.Magnifier
-import XMonad.Layout.MultiToggle (EOT (EOT), mkToggle, single, (??))
-import qualified XMonad.Layout.MultiToggle as MT (Toggle (..))
-import XMonad.Layout.MultiToggle.Instances (StdTransformers (MIRROR, NBFULL, NOBORDERS))
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Renamed
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.ShowWName
-import XMonad.Layout.Simplest
-import XMonad.Layout.SimplestFloat
-import XMonad.Layout.Spacing
-import XMonad.Layout.Spiral
-import XMonad.Layout.SubLayouts
-import XMonad.Layout.Tabbed
-import XMonad.Layout.ThreeColumns
-import qualified XMonad.Layout.ToggleLayouts as T (ToggleLayout (Toggle), toggleLayouts)
-import XMonad.Layout.WindowArranger (WindowArrangerMsg (..), windowArrange)
-import XMonad.Layout.WindowNavigation
-import qualified XMonad.StackSet as W
+import           XMonad.Layout.LayoutModifier
+import           XMonad.Layout.LimitWindows          (decreaseLimit,
+                                                      increaseLimit,
+                                                      limitWindows)
+import           XMonad.Layout.Magnifier
+import qualified XMonad.Layout.MultiToggle           as MT (Toggle (..))
+import           XMonad.Layout.MultiToggle           (EOT (EOT), mkToggle,
+                                                      single, (??))
+import           XMonad.Layout.MultiToggle.Instances (StdTransformers (MIRROR, NBFULL, NOBORDERS))
+import           XMonad.Layout.NoBorders
+import           XMonad.Layout.Renamed
+import           XMonad.Layout.ResizableTile
+import           XMonad.Layout.ShowWName
+import           XMonad.Layout.Simplest
+import           XMonad.Layout.SimplestFloat
+import           XMonad.Layout.Spacing
+import           XMonad.Layout.Spiral
+import           XMonad.Layout.SubLayouts
+import           XMonad.Layout.Tabbed
+import           XMonad.Layout.ThreeColumns
+import qualified XMonad.Layout.ToggleLayouts         as T (ToggleLayout (Toggle),
+                                                           toggleLayouts)
+import           XMonad.Layout.WindowArranger        (WindowArrangerMsg (..),
+                                                      windowArrange)
+import           XMonad.Layout.WindowNavigation
+import qualified XMonad.StackSet                     as W
 -- Utilities
-import XMonad.Util.Dmenu
-import XMonad.Util.EZConfig (additionalKeysP)
-import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
-import XMonad.Util.SpawnOnce
+import           XMonad.Util.Dmenu
+import           XMonad.Util.EZConfig                (additionalKeysP)
+import           XMonad.Util.NamedScratchpad
+import           XMonad.Util.Run                     (runProcessWithInput,
+                                                      safeSpawn, spawnPipe)
+import           XMonad.Util.SpawnOnce
 
 myFont :: String
 myFont = "xft:SauceCodePro Nerd Font Mono:regular:size=9:antialias=true:hinting=true"
@@ -99,7 +114,7 @@ myStartupHook = do
   -- spawnOnce "nm-applet &"
   -- spawnOnce "volumeicon &"
   -- spawnOnce "conky -c $HOME/.config/conky/doomone-xmonad.conkyrc"
-  spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand false --monitor 0 --transparent true --alpha 60 --tint 0x282c34  --height 22 &"
+  spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut true --expand false --monitor 0 --transparent true --alpha 60 --tint 0x6790eb  --height 22 &"
   -- spawnOnce "trayer --edge top --align right --widthtype request --padding 0 --SetDockType true --SetPartialStrut false --expand true --monitor 1 --transparent true --alpha 180 --tint 0x282c34  --height 22 &"
   spawnOnce "flameshot &"
   -- spawnOnce "emacs --daemon &" -- emacs daemon for the emacsclient
@@ -435,7 +450,7 @@ myKeys =
     ("M-d", spawn ("nwggrid -p -o 0.4")),
     -- SUPER + s KEYSTROKES
     ("C-<Return>", namedScratchpadAction myScratchPads "terminal"),
-    ("C-S-<Return>", namedScratchpadAction myScratchPads "browser"),
+    ("C-w", namedScratchpadAction myScratchPads "browser"),
     ("M-s m", namedScratchpadAction myScratchPads "mocp"),
     ("M-s c", namedScratchpadAction myScratchPads "calculator"),
     -- SUPER + ALT KEYS
@@ -603,13 +618,13 @@ main = do
                     ppOutput = \x -> hPutStrLn xmproc0 x, -- xmobar on monitor 1
                     --  >> hPutStrLn xmproc1 x                          -- xmobar on monitor 2
                     --  >> hPutStrLn xmproc2 x                          -- xmobar on monitor 3
-                    -- , ppCurrent = xmobarColor "#c792ea" "" . wrap "<box type=Bottom width=2 mb=2 color=#c792ea>" "</box>"         -- Current workspace
-                    ppCurrent = xmobarColor "#c792ea" "" . wrap "[ " "]", -- Current workspace
-                    ppVisible = xmobarColor "#c792ea" "" . clickable, -- Visible but not current workspace
-                    ppHidden = xmobarColor "#ff5050" "" . clickable, -- Hidden workspaces
-                    ppHiddenNoWindows = xmobarColor "#98c379" "" . clickable, -- Hidden workspaces (no windows)
-                    ppTitle = xmobarColor "#b3afc2" "" . shorten 48, -- Title of active window
-                    ppSep = "<fc=#666666> <fn=1>|</fn> </fc>", -- Separator character
+                    -- , ppCurrent = xmobarColor "#ffff00" "" . wrap "<box type=Bottom width=2 mb=2 color=#c792ea>" "</box>"         -- Current workspace
+                    ppCurrent = xmobarColor "#ffff00" "" . wrap "[ " "]", -- Current workspace
+                    ppVisible = xmobarColor "#ffffff" "" . clickable, -- Visible but not current workspace
+                    ppHidden = xmobarColor "#ffff00" "" . clickable, -- Hidden workspaces
+                    ppHiddenNoWindows = xmobarColor "#0000ff" "" . clickable, -- Hidden workspaces (no windows)
+                    ppTitle = xmobarColor "#ffff00" "" . shorten 48, -- Title of active window
+                    ppSep = "<fc=#000000> <fn=1>|</fn> </fc>", -- Separator character
                     ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!", -- Urgent workspace
                     ppExtras = [windowCount], -- # of windows current workspace
                     ppOrder = \(ws : l : t : ex) -> [ws, l] ++ ex ++ [t] -- order of things in xmobar
